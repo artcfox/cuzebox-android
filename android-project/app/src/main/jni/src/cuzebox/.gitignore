@@ -1,0 +1,21 @@
+# _obj_ directory if exists contains objects
+/_obj_
+# Various outputs
+/cuzebox
+/cuzebox.exe
+/cuzebox.html
+/cuzebox.data
+/cuzebox.html.mem
+/cuzebox.js
+/assets/chconv
+/assets/chconv.exe
+/assets/binconv
+/assets/binconv.exe
+# The gamefile.uze ROM needed by the Emscripten build
+/gamefile.uze
+/gamefile.c
+# If the program created various files, ignore those too
+/eeprom.bin
+/capture.mp4
+# If for a Windows build an SDL2 development library is supplied locally, skip that
+/SDL2*
