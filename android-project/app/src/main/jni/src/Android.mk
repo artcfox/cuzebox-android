@@ -26,6 +26,7 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	cuzebox/cu_ufile.c \
 	cuzebox/cu_vfat.c \
 	cuzebox/eepdump.c \
+	cuzebox/cdump.c \
 	cuzebox/filesys.c \
 	cuzebox/frame.c \
 	cuzebox/ginput.c \

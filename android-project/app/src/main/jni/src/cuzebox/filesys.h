@@ -54,10 +54,12 @@
 #define FILESYS_CH_EMU     1U
 /* EEPROM dumps */
 #define FILESYS_CH_EEP     2U
+/* CROM dumps */
+#define FILESYS_CH_CROM    3U
 
 /* Number of filesystem channels (must be one larger than the largest entry
 ** of the list above) */
-#define FILESYS_CH_NO      3U
+#define FILESYS_CH_NO      4U
 
 
 /*

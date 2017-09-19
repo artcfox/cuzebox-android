@@ -37,6 +37,7 @@
 #include "ginput.h"
 #include "frame.h"
 #include "eepdump.h"
+#include "cdump.h"
 #include "textgui.h"
 #ifdef ENABLE_VCAP
 #include "avconv.h"
@@ -90,6 +91,9 @@ static boole main_fmerge = FALSE;
 /* Previous state of EEPROM changes to save only after a write burst was completed */
 static boole main_peepch = FALSE;
 
+/* Previous state of CROM changes to save only after a write burst was completed */
+static boole main_pcch = FALSE;
+
 /* Default game to start without parameters */
 static const char* main_game = "/storage/emulated/0/cuzebox/Bootloader_0_4_5.hex";
 
@@ -124,6 +128,7 @@ static void main_loop(void)
  auint afreq;
  boole fdrop = FALSE;
  boole eepch;
+ boole cch;
  SDL_Event sdlevent;
  cu_state_cpu_t* ecpu;
  textgui_struct_t* tgui;
@@ -193,6 +198,16 @@ static void main_loop(void)
   eepdump_save(&(ecpu->eepr[0]));
  }
  main_peepch = eepch;
+
+ /* Check for CROM changes and save as needed */
+
+ ecpu = cu_avr_get_state(); /* Also needed by emulator whisper ports */
+ cch = cu_avr_crom_ismod();
+ if ( (main_pcch) &&
+      (!cch) ){ /* End of CROM write burst */
+  cdump_save(&(ecpu->crom[0]));
+ }
+ main_pcch = cch;
 
  /* Generate various emulator info for the GUI */
 
@@ -366,6 +381,7 @@ int main (int argc, char** argv)
 
  ecpu = cu_avr_get_state();
  eepdump_load(&(ecpu->eepr[0]));
+ cdump_load(&(ecpu->crom[0]));
 
  uzefile = cu_ufile_load(&(tstr[0]), &(ecpu->crom[0]), &ufhead);
  if (!uzefile){
@@ -417,6 +433,7 @@ int main (int argc, char** argv)
 
  ecpu = cu_avr_get_state();
  eepdump_save(&(ecpu->eepr[0]));
+ cdump_save(&(ecpu->crom[0]));
 
  ginput_quit();
  audio_quit();

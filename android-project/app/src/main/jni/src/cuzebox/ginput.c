@@ -142,6 +142,8 @@ void  ginput_init(void)
 
 #ifndef USE_SDL1
 
+ //SDL_GameControllerAddMappingsFromFile("gamecontrollerdb.txt");
+
  for (j = 0U; j < 2U; j++){
   for (i = 0U; i < 4U; i++){
    ginput_gamectr_ddig[j][i] = FALSE;

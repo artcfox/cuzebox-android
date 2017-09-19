@@ -53,7 +53,7 @@ typedef struct{
 ** they are used for more complex things. So the initializer below is a hack,
 ** it is meant to zero initialize everything. But it relies on FILESYS_CH_NO's
 ** size, so check here */
-#if (FILESYS_CH_NO != 3U)
+#if (FILESYS_CH_NO != 4U)
 #error "Check filesys_ch's initializer! FILESYS_CH_NO changed!"
 #endif
 
@@ -63,6 +63,7 @@ static char filesys_path[PATH_SIZE] = {0U};
 
 /* Channels */
 static filesys_ch_t filesys_ch[FILESYS_CH_NO] = {
+ { {0U}, NULL, FALSE, FALSE, 0U},
  { {0U}, NULL, FALSE, FALSE, 0U},
  { {0U}, NULL, FALSE, FALSE, 0U},
  { {0U}, NULL, FALSE, FALSE, 0U},
