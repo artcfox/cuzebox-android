@@ -142,6 +142,14 @@ static void main_loop(void)
  else{                  drift += 17U; }
  drift -= tdif;
 
+ /* Check for possible total CPU starvation. When such a situation arises (a
+ ** huge difference in prev. and current tick), throw drift away. */
+
+ if (tdif > 100U){
+  drift = 0U;
+  tdif  = 16U;
+ }
+
  /* Handle divergences */
 
  if (drift >= 0x80000000U){   /* Possibly too slow */
@@ -418,7 +426,6 @@ int main (int argc, char** argv)
 
  cu_avr_reset(bootpri);
  main_t5_cc = cu_avr_getcycle();
- main_ptick = SDL_GetTicks();
  audio_reset();
  textgui_reset();
 
@@ -432,10 +439,12 @@ int main (int argc, char** argv)
  }
 
 
+ main_ptick = SDL_GetTicks() - 16U; /* First frame interval should be normal */
 #ifdef __EMSCRIPTEN__
  emscripten_set_main_loop(&main_loop, 0, 1);
 #else
  while (!main_exit){ main_loop(); }
+
 
  ecpu = cu_avr_get_state();
  if ( (main_promch) || (cu_avr_crom_ischanged  (TRUE)) ){ romdump_save(&(ecpu->crom[0])); }
