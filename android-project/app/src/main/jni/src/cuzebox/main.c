@@ -81,6 +81,9 @@ static auint main_t5_cc;
 /* Request for discarding frame limitation */
 static boole main_nolimit = FALSE;
 
+/* Keeps track of clock ticks */
+static auint main_ctick;
+
 /* Request frame merging (flicker reduction) */
 #ifdef FLAG_DISPLAY_FRAMEMERGE
 static boole main_fmerge = TRUE;
@@ -110,6 +113,14 @@ static boole main_isadvfr = FALSE;
 
 
 
+/*
+** Stops the speed of the emulator from going wonky when task switching on mobile platforms
+*/
+static int main_eventfilter(void* userdata, SDL_Event* sdlevent)
+{
+ if (sdlevent->type == SDL_APP_WILLENTERFOREGROUND){ main_ptick = main_ctick = SDL_GetTicks(); }
+ return 1;
+}
 
 
 /*
@@ -117,8 +128,8 @@ static boole main_isadvfr = FALSE;
 */
 static void main_loop(void)
 {
- auint ctick = SDL_GetTicks();
- auint tdif  = ctick - main_ptick;
+ main_ctick = SDL_GetTicks();
+ auint tdif  = main_ctick - main_ptick;
  auint drift = main_tdrift;
  auint favg;
  auint ccur;
@@ -173,7 +184,7 @@ static void main_loop(void)
  /* Now the drift can be saved */
 
  main_tdrift = drift;
- main_ptick  = ctick;
+ main_ptick  = main_ctick;
  main_fdrop  = fdtmp;
  main_frc   ++;
  if (main_tfrac >= 2U){ main_tfrac = 0U; }
@@ -435,6 +446,7 @@ int main (int argc, char** argv)
 #ifdef __EMSCRIPTEN__
  emscripten_set_main_loop(&main_loop, 0, 1);
 #else
+ SDL_SetEventFilter(main_eventfilter, NULL);
  while (!main_exit){ main_loop(); }
 
  ecpu = cu_avr_get_state();
