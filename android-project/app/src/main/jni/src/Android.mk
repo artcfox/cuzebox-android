@@ -31,6 +31,7 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
 	cuzebox/ginput.c \
 	cuzebox/guicore.c \
 	cuzebox/main.c \
+	cuzebox/romdump.c \
 	cuzebox/textgui.c
 
 LOCAL_SHARED_LIBRARIES := SDL2
