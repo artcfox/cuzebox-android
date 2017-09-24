@@ -167,6 +167,21 @@ public class SDLActivity extends Activity {
         Log.v(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 
+        //only for new androids
+        if(Build.VERSION.SDK_INT>=23) {
+            //did user granted this permission?
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+                //should we show toast with info WHY do we need this permission form user?
+                if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    final Toast info =  Toast.makeText(this, "We need to access your SD card and/or internal storage", Toast.LENGTH_LONG);
+                }
+                //popup where user can grant us power to write SD
+                //dunno why 13, there have to be some kind of hardcoded number so I just typed in 13
+                requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 13);
+            }
+        }
+
         SDLActivity.initialize();
 
         // So we can call stuff from static callbacks
