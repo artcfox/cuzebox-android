@@ -9,10 +9,10 @@ Then follow the instructions below to setup the libsdl dependency
 
 
     cd ~/Downloads
-    wget http://libsdl.org/release/SDL2-2.0.5.tar.gz
+    wget http://libsdl.org/release/SDL2-2.0.6.tar.gz
     cd android-project/app/src/main/jni/
-    tar xf ~/Downloads/SDL2-2.0.5.tar.gz
-    mv SDL2-2.0.5 SDL2
+    tar xf ~/Downloads/SDL2-2.0.6.tar.gz
+    mv SDL2-2.0.6 SDL2
     cd SDL2/include
     ln -s . SDL2
 
