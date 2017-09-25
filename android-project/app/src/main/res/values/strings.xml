@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CUzeBox</string>
+    <string name="no_permission_title">Permissions Required</string>
+    <string name="no_permission_message">CUzeBox creates a directory on the external storage for you to download ROM (.uze) files into. This is also the place where it reads the Bootloader.hex file from (so you can choose which ROM to load). It will not function without having access to external storage.</string>
+    <string name="no_permission_button_text">Quit</string>
 </resources>
