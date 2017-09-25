@@ -54,28 +54,22 @@
             </intent-filter>
             -->
         </activity>
+        <activity android:name="ExtractAssets"
+            android:label="ExtractAssets"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
+            android:alwaysRetainTaskState="true"
+            android:launchMode="singleTask"
+            android:finishOnTaskLaunch="true"
+            >
+        </activity>
         <activity android:name="LaunchApp"
-            android:label="Launch"
+            android:label="LaunchApp"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
             android:screenOrientation="landscape"
             android:alwaysRetainTaskState="true"
             android:launchMode="singleTask"
             android:finishOnTaskLaunch="true"
             >
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
-            <!-- Drop file event -->
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="*/*" />
-            </intent-filter>
-            -->
         </activity>
     </application>
 

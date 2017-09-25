@@ -4,4 +4,9 @@
     <string name="no_permission_title">Permissions Required</string>
     <string name="no_permission_message">CUzeBox creates a directory on the external storage for you to download ROM (.uze) files into. This is also the place where it reads the Bootloader.hex file from (so you can choose which ROM to load). It will not function without having access to external storage.</string>
     <string name="no_permission_button_text">Quit</string>
+    <string name="extract_title">Error Launching CUzeBox</string>
+    <string name="extract_unable_to_create_dir">Unable to create directory: \"%s\"</string>
+    <string name="extract_is_not_directory">The path \"%s\" exists, but it is not a directory. You must delete or rename it for this application to work properly.</string>
+    <string name="extract_missing_bootloader">Could not find the bootloader: \"%s\"</string>
+    <string name="extract_button_text">Quit</string>
 </resources>

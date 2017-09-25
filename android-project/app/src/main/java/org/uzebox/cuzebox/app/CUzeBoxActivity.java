@@ -10,14 +10,14 @@ import android.os.Build;
 import android.os.Bundle;
 
 /**
- * Handles requesting Runtime Permissions when running on Marshmallow or newer.
+ * Handles requesting Runtime Permissions when running on Marshmallow or newer
  */
 
 public class CUzeBoxActivity extends Activity {
     public static final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 1337;
 
     private void LaunchNextActivity() {
-        Intent intent = new Intent(this, LaunchApp.class);
+        Intent intent = new Intent(this, ExtractAssets.class);
         startActivity(intent);
         finish();
     }
