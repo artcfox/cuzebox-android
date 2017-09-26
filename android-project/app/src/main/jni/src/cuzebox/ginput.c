@@ -397,6 +397,37 @@ void  ginput_sendevent(SDL_Event const* ev)
 
  }
 
+ if ( ((ev->type) == SDL_JOYDEVICEADDED) ){
+  int deviceIndex = ev->jdevice.which;
+  if (deviceIndex < 2){
+   SDL_JoystickOpen(deviceIndex);
+   SDL_JoystickEventState(SDL_ENABLE);
+  }
+ }
+
+ if ( ((ev->type) == SDL_FINGERDOWN) || ((ev->type) == SDL_FINGERUP) ){
+  if ((ev->type) == SDL_FINGERDOWN){ press = TRUE; }
+  if (ev->tfinger.x < 0.5){
+   if (ev->tfinger.y < 0.1)
+    cu_ctr_setsnes_single(0, CU_CTR_SNES_LSH, press);
+   else if ( (ev->tfinger.y < 0.5) && (ev->tfinger.y >= 0.1) )
+    cu_ctr_setsnes_single(0, CU_CTR_SNES_SELECT, press);
+   else if ( (ev->tfinger.y >= 0.5) && (ev->tfinger.y < 0.75) )
+    cu_ctr_setsnes_single(0, CU_CTR_SNES_Y, press);
+   else if (ev->tfinger.y >= 0.75)
+    cu_ctr_setsnes_single(0, CU_CTR_SNES_B, press);
+  }else{
+   if (ev->tfinger.y < 0.1)
+    cu_ctr_setsnes_single(0, CU_CTR_SNES_RSH, press);
+   else if ( (ev->tfinger.y < 0.5) && (ev->tfinger.y >= 0.1) )
+    cu_ctr_setsnes_single(0, CU_CTR_SNES_START, press);
+   else if ( (ev->tfinger.y >= 0.5) && (ev->tfinger.y < 0.75) )
+    cu_ctr_setsnes_single(0, CU_CTR_SNES_X, press);
+   else
+    cu_ctr_setsnes_single(0, CU_CTR_SNES_A, press);
+  }
+ }
+
  /* Joystick axis input. This complements controller input, necessary due to
  ** the poor API not being able to handle game controllers properly. If SDL2
  ** will be fixed at some point in the future, this may be removed (along with
