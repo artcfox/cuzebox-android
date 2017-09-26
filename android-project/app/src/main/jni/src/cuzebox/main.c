@@ -95,7 +95,7 @@ static boole main_peepch = FALSE;
 static boole main_promch = FALSE;
 
 /* Default game to start without parameters */
-static const char* main_game = "/storage/emulated/0/cuzebox/Bootloader_0_4_5.hex";
+static const char* main_game = "gamefile.uze";
 
 #ifdef ENABLE_VCAP
 /* Whether video capturing is enabled */
