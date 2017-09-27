@@ -54,14 +54,9 @@
             </intent-filter>
             -->
         </activity>
-        <activity android:name="ExtractAssets"
-            android:label="ExtractAssets"
-            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
-            android:alwaysRetainTaskState="true"
-            android:launchMode="singleTask"
-            android:finishOnTaskLaunch="true"
-            >
-        </activity>
+        <service
+            android:name=".ExtractAssets"
+            android:exported="false"/>
         <activity android:name="LaunchApp"
             android:label="LaunchApp"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"

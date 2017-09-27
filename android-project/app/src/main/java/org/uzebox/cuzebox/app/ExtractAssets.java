@@ -1,12 +1,9 @@
 package org.uzebox.cuzebox.app;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.res.AssetManager;
-import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 
 import java.io.File;
@@ -14,21 +11,23 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Locale;
 
 
 /**
  * Extracts assets stored inside the .apk to an external storage directory if they don't already exist there
  */
 
-public class ExtractAssets extends Activity {
-    private void LaunchNextActivity() {
-        Intent intent = new Intent(this, LaunchApp.class);
-        startActivity(intent);
-        finish();
+public class ExtractAssets extends IntentService {
+    public static final String PENDING_RESULT_EXTRA = "pending_result";
+    public static final String EA_ERRORS_EXTRA = "ea_errors";
+    public static final String EA_FILENAME_EXTRA = "ea_filename";
+    public static final int RESULT_CODE = 0;
+
+    public ExtractAssets() {
+        super("ExtractAssets");
     }
 
-    public enum EA_ERRORS {
+    enum EA_ERRORS {
         NO_ERR, ERR_UNABLE_TO_CREATE_DIR, ERR_IS_NOT_DIRECTORY,
         ERR_UNABLE_TO_GET_ASSET_LIST, ERR_EXTRACTING_FILE
     };
@@ -36,16 +35,17 @@ public class ExtractAssets extends Activity {
     private final static int BUFFER_SIZE = 1024;
 
     private void copyAssetFile(InputStream in, OutputStream out) throws IOException {
-            byte[] buffer = new byte[BUFFER_SIZE];
-            int read;
-            while ((read = in.read(buffer)) != -1) {
-                out.write(buffer, 0, read);
-            }
+        byte[] buffer = new byte[BUFFER_SIZE];
+        int read;
+        while ((read = in.read(buffer)) != -1) {
+            out.write(buffer, 0, read);
+        }
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onHandleIntent(Intent workIntent) {
+        // Gets data from the incoming Intent
+        String dataString = workIntent.getDataString();
 
         EA_ERRORS err = EA_ERRORS.NO_ERR;
         String errFile = "";
@@ -112,40 +112,26 @@ public class ExtractAssets extends Activity {
             }
         }
 
-        if (err == EA_ERRORS.NO_ERR) {
-            LaunchNextActivity();
-        } else {
-            AlertDialog.Builder builder;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-            } else {
-                builder = new AlertDialog.Builder(this);
-            }
+        // Return the contents of 'err' in the calling Activity's onActivityResult
+        // with any extra information stored in Extras.
+        PendingIntent reply = workIntent.getParcelableExtra(PENDING_RESULT_EXTRA);
+        try {
+            Intent result = new Intent();
+            result.putExtra(EA_ERRORS_EXTRA, err.ordinal());
+            // Add any extra information about the error
             switch (err) {
                 case ERR_UNABLE_TO_CREATE_DIR:
-                    builder.setTitle(R.string.extract_title)
-                           .setMessage(String.format(Locale.ENGLISH, getString(R.string.extract_unable_to_create_dir), f.getAbsolutePath()));
-                    break;
                 case ERR_IS_NOT_DIRECTORY:
-                    builder.setTitle(R.string.extract_title)
-                           .setMessage(String.format(Locale.ENGLISH, getString(R.string.extract_is_not_directory), f.getAbsolutePath()));
-                    break;
-                case ERR_UNABLE_TO_GET_ASSET_LIST:
-                    builder.setTitle(R.string.extract_title)
-                           .setMessage(R.string.extract_no_asset_list);
+                    result.putExtra(EA_FILENAME_EXTRA, f.getAbsolutePath());
                     break;
                 case ERR_EXTRACTING_FILE:
-                    builder.setTitle(R.string.extract_title)
-                           .setMessage(String.format(Locale.ENGLISH, getString(R.string.extract_error_extracting), errFile));
+                    result.putExtra(EA_FILENAME_EXTRA, errFile);
+                    break;
             }
-            builder.setCancelable(false)
-                   .setPositiveButton(R.string.extract_button_text, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                   })
-                   .show();
+            reply.send(this, RESULT_CODE, result);
+        } catch (PendingIntent.CanceledException e) {
+            // NOOP
         }
+
     }
 }
